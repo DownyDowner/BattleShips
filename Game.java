@@ -4,6 +4,7 @@ import java.util.Scanner;
 
 public class Game {
     public static final int OCEAN_SIZE = 10;
+    public static final int NB_PLAYERS = 2;
     private State state;
     private Player player1;
     private Player player2;
@@ -28,12 +29,16 @@ public class Game {
 
     private void placeShips() {
         state.placeShips();
+        for (int i = 0; i < NB_PLAYERS; i++) {
+            performShipPlacement();
+            switchCurrentPlayer();
+        }
+    }
+
+    private void performShipPlacement() {
+        state.placeShips();
         System.out.println("Placement des navires pour " + currentPlayer.getLogin());
         currentPlayer.getOcean().placeShips();
-        switchCurrentPlayer();
-        System.out.println("Placement des navires pour " + currentPlayer.getLogin());
-        currentPlayer.getOcean().placeShips();
-        switchCurrentPlayer();
     }
 
     private void switchCurrentPlayer() {
