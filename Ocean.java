@@ -35,85 +35,92 @@ public class Ocean {
     }
 
     public void placeShips() {
-        System.out.println();
         Scanner scanner = new Scanner(System.in);
         for (Boat boat : boats) {
+            printOcean();
             System.out.println("Placement du bateau " + boat.getName() + " (taille : " + boat.getSize() + ")");
             boolean placed = false;
             while (!placed) {
-                System.out.print("Entrez la coordonnée x : ");
-                int x = scanner.nextInt();
-                System.out.print("Entrez la coordonnée y : ");
-                int y = scanner.nextInt();
-                System.out.print("Direction (1: Haut, 2: Droite, 3: Bas, 4: Gauche) : ");
+                System.out.print("Entrez le n° de la ligne : ");
+                int line = scanner.nextInt();
+                System.out.print("Entrez le n° de la colonne : ");
+                int column = scanner.nextInt();
+                System.out.println("Direction : ");
+                System.out.println("\t1: Haut");
+                System.out.println("\t2: Droite");
+                System.out.println("\t3: Bas");
+                System.out.println("\t4: Gauche");
                 int direction = scanner.nextInt();
-                placed = placeBoat(boat, x, y, direction);
+                placed = placeBoat(boat, line, column, direction);
                 if (!placed) {
                     System.out.println("Placement invalide ! Réessayez.");
                 }
             }
-            printOcean();
         }
         allPlaced = true;
     }
 
-    public boolean placeBoat(Boat boat, int x, int y, int direction) {
+    public boolean placeBoat(Boat boat, int line, int column, int direction) {
         int size = boat.getSize();
 
         switch (direction) {
             case DIRECTION_TOP:
-                if (x - size + 1 < 0) {
+                try {
+                    for (int i = 0; i < size; i++) {
+                        if (cells[line - i][column].isOccupied()) {
+                            return false;
+                        }
+                    }
+                }catch (IndexOutOfBoundsException exception) {
                     return false;
                 }
-                for (int i = x; i > x - size; i--) {
-                    if (cells[i][y].isOccupied()) {
-                        return false;
-                    }
-                }
-                for (int i = x; i > x - size; i--) {
-                    cells[i][y].setOccupied(true);
+                for (int i = 0; i < size; i++) {
+                    cells[line - i][column].setOccupied(true);
                 }
                 break;
 
             case DIRECTION_RIGHT:
-                if (y + size > Game.OCEAN_SIZE) {
+                try {
+                    for (int i = 0; i < size; i++) {
+                        if (cells[line][column + i].isOccupied()) {
+                            return false;
+                        }
+                    }
+                }catch (IndexOutOfBoundsException exception) {
                     return false;
                 }
-                for (int i = y; i < y + size; i++) {
-                    if (cells[x][i].isOccupied()) {
-                        return false;
-                    }
-                }
-                for (int i = y; i < y + size; i++) {
-                    cells[x][i].setOccupied(true);
+                for (int i = 0; i < size; i++) {
+                    cells[line][column + i].setOccupied(true);
                 }
                 break;
 
             case DIRECTION_BOTTOM:
-                if (x + size > Game.OCEAN_SIZE) {
+                try {
+                    for (int i = 0; i < size; i++) {
+                        if (cells[line + i][column].isOccupied()) {
+                            return false;
+                        }
+                    }
+                }catch (IndexOutOfBoundsException exception) {
                     return false;
                 }
-                for (int i = x; i < x + size; i++) {
-                    if (cells[i][y].isOccupied()) {
-                        return false;
-                    }
-                }
-                for (int i = x; i < x + size; i++) {
-                    cells[i][y].setOccupied(true);
+                for (int i = 0; i < size; i++) {
+                    cells[line + i][column].setOccupied(true);
                 }
                 break;
 
             case DIRECTION_LEFT:
-                if (y - size + 1 < 0) {
+                try {
+                    for (int i = 0; i < size; i++) {
+                        if (cells[line][column - i].isOccupied()) {
+                            return false;
+                        }
+                    }
+                }catch (IndexOutOfBoundsException exception) {
                     return false;
                 }
-                for (int i = y; i > y - size; i--) {
-                    if (cells[x][i].isOccupied()) {
-                        return false;
-                    }
-                }
-                for (int i = y; i > y - size; i--) {
-                    cells[x][i].setOccupied(true);
+                for (int i = 0; i < size; i++) {
+                    cells[line][column - i].setOccupied(true);
                 }
                 break;
 
@@ -135,15 +142,7 @@ public class Ocean {
         for (int i = 0; i < Game.OCEAN_SIZE; i++) {
             System.out.print(i + " ");
             for (int j = 0; j < Game.OCEAN_SIZE; j++) {
-                if (cells[i][j].isHit()) {
-                    System.out.print("X ");
-                }else {
-                    if (cells[i][j].isOccupied()) {
-                        System.out.print("O ");
-                    }else{
-                        System.out.print("- ");
-                    }
-                }
+                System.out.print(cells[i][j].isHit() ? "X " : (cells[i][j].isOccupied() ? "O " : "- "));
             }
             System.out.println();
         }

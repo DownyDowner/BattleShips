@@ -1,10 +1,10 @@
 public final class State {
      public final void start() {
-         System.out.println("Le jeu démarre.");
+         System.out.println("Le jeu démarre...");
      }
 
     public final void placeShips() {
-         System.out.println("Placement des navires.");
+         System.out.println("Phase de placement des navires.");
     }
 
     public final void attack() {

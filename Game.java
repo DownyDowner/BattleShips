@@ -1,6 +1,4 @@
-import java.io.IOException;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Game {
     public static final int OCEAN_SIZE = 10;
@@ -21,6 +19,10 @@ public class Game {
         this.currentPlayer = (result == 1) ? this.player1 : this.player2;
     }
 
+    public static void clearConsole() {
+        for (int i = 0; i < 50; i++) System.out.println();
+    }
+
     public void start() {
         state.start();
         placeShips();
@@ -36,9 +38,9 @@ public class Game {
     }
 
     private void performShipPlacement() {
-        state.placeShips();
         System.out.println("Placement des navires pour " + currentPlayer.getLogin());
         currentPlayer.getOcean().placeShips();
+        Game.clearConsole();
     }
 
     private void switchCurrentPlayer() {
