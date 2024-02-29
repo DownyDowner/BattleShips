@@ -1,4 +1,6 @@
+import java.io.IOException;
 import java.util.Random;
+import java.util.Scanner;
 
 public class Game {
     public static final int OCEAN_SIZE = 10;
@@ -8,7 +10,7 @@ public class Game {
     private Player currentPlayer;
 
     public Game(String name1, String name2) {
-        state = new AwaitingState();
+        state = new State();
         this.player1 = new Player(name1);
         this.player2 = new Player(name2);
 
@@ -16,5 +18,25 @@ public class Game {
         double randomValue = random.nextDouble();
         int result = (int) Math.floor(randomValue * 2) + 1;
         this.currentPlayer = (result == 1) ? this.player1 : this.player2;
+    }
+
+    public void start() {
+        state.start();
+        placeShips();
+        // playGame();
+    }
+
+    private void placeShips() {
+        state.placeShips();
+        System.out.println("Placement des navires pour " + currentPlayer.getLogin());
+        currentPlayer.getOcean().placeShips();
+        switchCurrentPlayer();
+        System.out.println("Placement des navires pour " + currentPlayer.getLogin());
+        currentPlayer.getOcean().placeShips();
+        switchCurrentPlayer();
+    }
+
+    private void switchCurrentPlayer() {
+        currentPlayer = (currentPlayer.equals(player1)) ? player2 : player1;
     }
 }
