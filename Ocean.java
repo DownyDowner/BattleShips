@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Scanner;
 
 public class Ocean {
-
     private static final int DIRECTION_TOP = 1;
     private static final int DIRECTION_RIGHT = 2;
     private static final int DIRECTION_BOTTOM = 3;
@@ -60,7 +59,7 @@ public class Ocean {
         allPlaced = true;
     }
 
-    public boolean placeBoat(Boat boat, int line, int column, int direction) {
+    private boolean placeBoat(Boat boat, int line, int column, int direction) {
         int size = boat.getSize();
 
         switch (direction) {
@@ -75,7 +74,7 @@ public class Ocean {
                     return false;
                 }
                 for (int i = 0; i < size; i++) {
-                    cells[line - i][column].setOccupied(true);
+                    cells[line - i][column].placeBoat(boat);
                 }
                 break;
 
@@ -90,7 +89,7 @@ public class Ocean {
                     return false;
                 }
                 for (int i = 0; i < size; i++) {
-                    cells[line][column + i].setOccupied(true);
+                    cells[line][column + i].placeBoat(boat);
                 }
                 break;
 
@@ -105,7 +104,7 @@ public class Ocean {
                     return false;
                 }
                 for (int i = 0; i < size; i++) {
-                    cells[line + i][column].setOccupied(true);
+                    cells[line + i][column].placeBoat(boat);
                 }
                 break;
 
@@ -120,16 +119,41 @@ public class Ocean {
                     return false;
                 }
                 for (int i = 0; i < size; i++) {
-                    cells[line][column - i].setOccupied(true);
+                    cells[line][column - i].placeBoat(boat);
                 }
                 break;
 
             default:
                 return false;
         }
-        boat.setPlaced(true);
 
         return true;
+    }
+
+    public boolean attack(int line, int column) {
+        try {
+            if (cells[line][column].isHit()) {
+                System.out.println("La case a déjà été attaquée.");
+                return false;
+            }else {
+                if (cells[line][column].isOccupied()) {
+                    System.out.println("Touché! ");
+                    cells[line][column].hit();
+                    Boat boat = cells[line][column].getBoat();
+                    if(boat.getNbLives() <= 0) {
+                        System.out.println("Le " + boat.getName() + " est coulé.");
+                        nbSunkBoats++;
+                    }
+                }else {
+                    System.out.println("Manqué...");
+                    cells[line][column].hit();
+                }
+                return true;
+            }
+        }catch (IndexOutOfBoundsException exception) {
+            System.out.println("Hors des limites.");
+            return false;
+        }
     }
 
     public void printOcean() {
@@ -146,5 +170,9 @@ public class Ocean {
             }
             System.out.println();
         }
+    }
+
+    public int getNbSunkBoats() {
+        return nbSunkBoats;
     }
 }

@@ -12,6 +12,6 @@ public class Main {
         String name2 = scanner.nextLine();
 
         Game game = new Game(name1, name2);
-        game.start();
+        game.makeGame();
     }
 }
