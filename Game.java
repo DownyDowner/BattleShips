@@ -1,3 +1,4 @@
+import java.util.InputMismatchException;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -52,12 +53,18 @@ public class Game {
             System.out.println("Vous avez coulé " + opponent.getOcean().getNbSunkBoats() + " bateau(x) de votre adversaire.");
             boolean attackDone = false;
             while (!attackDone) {
-                System.out.print("Entrez le n° de la ligne : ");
-                int line = scanner.nextInt();
-                System.out.print("Entrez le n° de la colonne : ");
-                int column = scanner.nextInt();
-                attackDone = opponent.getOcean().attack(line, column);
+                try {
+                    System.out.print("Entrez le n° de la ligne : ");
+                    int line = scanner.nextInt();
+                    System.out.print("Entrez le n° de la colonne : ");
+                    int column = scanner.nextInt();
+                    attackDone = opponent.getOcean().attack(line, column);
+                }catch (InputMismatchException e) {
+                     System.out.println("Entrée invalide ! Assurez-vous d'entrer un entier.");
+                     scanner.nextLine();
+                }
             }
+
             if (!isFinished()) switchCurrentPlayer();
         }
         System.out.println(currentPlayer.getLogin() + " a gagné");

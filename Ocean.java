@@ -1,5 +1,6 @@
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.List;
 import java.util.Scanner;
 
@@ -39,22 +40,30 @@ public class Ocean {
             printOceanCurrentPlayer();
             System.out.println("Placement du bateau " + boat.getName() + " (taille : " + boat.getSize() + ")");
             boolean placed = false;
+
             while (!placed) {
-                System.out.print("Entrez le n° de la ligne : ");
-                int line = scanner.nextInt();
-                System.out.print("Entrez le n° de la colonne : ");
-                int column = scanner.nextInt();
-                System.out.println("Direction : ");
-                System.out.println("\t1: Haut");
-                System.out.println("\t2: Droite");
-                System.out.println("\t3: Bas");
-                System.out.println("\t4: Gauche");
-                int direction = scanner.nextInt();
-                placed = placeBoat(boat, line, column, direction);
+                try {
+                    System.out.print("Entrez le n° de la ligne : ");
+                    int line = scanner.nextInt();
+                    System.out.print("Entrez le n° de la colonne : ");
+                    int column = scanner.nextInt();
+                    System.out.println("Direction : ");
+                    System.out.println("\t1: Haut");
+                    System.out.println("\t2: Droite");
+                    System.out.println("\t3: Bas");
+                    System.out.println("\t4: Gauche");
+                    int direction = scanner.nextInt();
+                    placed = placeBoat(boat, line, column, direction);
+                }catch (InputMismatchException exception) {
+                    System.out.println("Entrée invalide ! Assurez-vous d'entrer un entier.");
+                    scanner.nextLine();
+                }
+
                 if (!placed) {
                     System.out.println("Placement invalide ! Réessayez.");
                 }
             }
+
         }
         allPlaced = true;
     }
