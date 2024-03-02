@@ -36,7 +36,7 @@ public class Ocean {
     public void placeShips() {
         Scanner scanner = new Scanner(System.in);
         for (Boat boat : boats) {
-            printOcean();
+            printOceanCurrentPlayer();
             System.out.println("Placement du bateau " + boat.getName() + " (taille : " + boat.getSize() + ")");
             boolean placed = false;
             while (!placed) {
@@ -156,8 +156,8 @@ public class Ocean {
         }
     }
 
-    public void printOcean() {
-        System.out.println("Océan :");
+    public void printOceanCurrentPlayer() {
+        System.out.println("Voici votre océan :");
         System.out.print("  ");
         for (int i = 0; i < Game.OCEAN_SIZE; i++) {
             System.out.print(i + " ");
@@ -167,6 +167,22 @@ public class Ocean {
             System.out.print(i + " ");
             for (int j = 0; j < Game.OCEAN_SIZE; j++) {
                 System.out.print(cells[i][j].isHit() ? "X " : (cells[i][j].isOccupied() ? "O " : "- "));
+            }
+            System.out.println();
+        }
+    }
+
+    public void printOceanOpponent() {
+        System.out.println("Voici l'océan de votre adversaire :");
+        System.out.print("  ");
+        for (int i = 0; i < Game.OCEAN_SIZE; i++) {
+            System.out.print(i + " ");
+        }
+        System.out.println();
+        for (int i = 0; i < Game.OCEAN_SIZE; i++) {
+            System.out.print(i + " ");
+            for (int j = 0; j < Game.OCEAN_SIZE; j++) {
+                System.out.print(cells[i][j].isHit() ? "X " : "- ");
             }
             System.out.println();
         }

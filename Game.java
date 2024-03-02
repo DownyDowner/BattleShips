@@ -45,9 +45,11 @@ public class Game {
         state.attack();
         Scanner scanner = new Scanner(System.in);
         while (!isFinished()) {
-            System.out.println(currentPlayer + " à toi de jouer!");
-            currentPlayer.getOcean().printOcean();
             Player opponent = (currentPlayer.equals(player1)) ? player2 : player1;
+            System.out.println(currentPlayer + " à toi de jouer!");
+            opponent.getOcean().printOceanOpponent();
+            currentPlayer.getOcean().printOceanCurrentPlayer();
+            System.out.println("Vous avez coulé " + opponent.getOcean().getNbSunkBoats() + " bateau(x) de votre adversaire.");
             boolean attackDone = false;
             while (!attackDone) {
                 System.out.print("Entrez le n° de la ligne : ");
