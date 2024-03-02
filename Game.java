@@ -11,7 +11,7 @@ public class Game {
     private Player currentPlayer;
 
     public Game(String name1, String name2) {
-        state = new State();
+        state = new StartState();
         this.player1 = new Player(name1);
         this.player2 = new Player(name2);
 
@@ -22,14 +22,14 @@ public class Game {
     }
 
     public void makeGame() {
-        state.start();
+        state.start(this);
         placeShips();
         attack();
-        state.finish();
+        state.finish(this);
     }
 
     private void placeShips() {
-        state.placeShips();
+        state.placeShips(this);
         for (int i = 0; i < NB_PLAYERS; i++) {
             performShipPlacement();
             switchCurrentPlayer();
@@ -42,11 +42,11 @@ public class Game {
     }
 
     private void attack() {
-        state.attack();
+        state.attack(this);
         Scanner scanner = new Scanner(System.in);
         while (!isFinished()) {
             Player opponent = (currentPlayer.equals(player1)) ? player2 : player1;
-            System.out.println(currentPlayer + " à toi de jouer!");
+            System.out.println(currentPlayer.getLogin() + " à toi de jouer!");
             opponent.getOcean().printOceanOpponent();
             currentPlayer.getOcean().printOceanCurrentPlayer();
             System.out.println("Vous avez coulé " + opponent.getOcean().getNbSunkBoats() + " bateau(x) de votre adversaire.");
@@ -69,5 +69,9 @@ public class Game {
 
     private boolean isFinished() {
         return player1.getOcean().getNbSunkBoats() >= NB_BOAT || player2.getOcean().getNbSunkBoats() >= NB_BOAT;
+    }
+
+    public void setState(State state) {
+        this.state = state;
     }
 }
