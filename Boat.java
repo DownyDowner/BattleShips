@@ -15,8 +15,6 @@ public class Boat {
         return name;
     }
 
-
-
     public int getSize() {
         return size;
     }
