@@ -69,7 +69,7 @@ class AttackState implements State {
 
     @Override
     public void finish(Game game) {
-        System.out.println("Transition vers la fin de partie.");
+        System.out.println("La bataille est finie.");
         game.setState(new FinishState());
     }
 }
@@ -92,6 +92,6 @@ class FinishState implements State {
 
     @Override
     public void finish(Game game) {
-        System.out.println("La partie est déjà terminée.");
+        System.out.println("La partie est terminée.");
     }
 }

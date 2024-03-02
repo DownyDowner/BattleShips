@@ -67,6 +67,7 @@ public class Game {
 
             if (!isFinished()) switchCurrentPlayer();
         }
+        state.finish(this);
         System.out.println(currentPlayer.getLogin() + " a gagné");
     }
 
