@@ -1,6 +1,4 @@
-import java.util.InputMismatchException;
 import java.util.Random;
-import java.util.Scanner;
 
 public class Game {
     public static final int OCEAN_SIZE = 10;
@@ -22,64 +20,31 @@ public class Game {
         this.currentPlayer = (result == 1) ? this.player1 : this.player2;
     }
 
-    public void makeGame() {
+    public void startGame() {
         state.start(this);
-        placeShips();
-        attack();
-        state.finish(this);
-    }
-
-    private void placeShips() {
         state.placeShips(this);
-        for (int i = 0; i < NB_PLAYERS; i++) {
-            performShipPlacement();
-            switchCurrentPlayer();
-        }
     }
 
-    private void performShipPlacement() {
-        System.out.println("Placement des navires pour " + currentPlayer.getLogin());
-        currentPlayer.getOcean().placeShips();
+    public Player getCurrentPlayer() {
+        return currentPlayer;
     }
 
-    private void attack() {
-        state.attack(this);
-        Scanner scanner = new Scanner(System.in);
-        while (!isFinished()) {
-            Player opponent = (currentPlayer.equals(player1)) ? player2 : player1;
-            System.out.println(currentPlayer.getLogin() + " à toi de jouer!");
-            opponent.getOcean().printOceanOpponent();
-            currentPlayer.getOcean().printOceanCurrentPlayer();
-            System.out.println("Vous avez coulé " + opponent.getOcean().getNbSunkBoats() + " bateau(x) de votre adversaire.");
-            boolean attackDone = false;
-            while (!attackDone) {
-                try {
-                    System.out.print("Entrez le n° de la ligne : ");
-                    int line = scanner.nextInt();
-                    System.out.print("Entrez le n° de la colonne : ");
-                    int column = scanner.nextInt();
-                    attackDone = opponent.getOcean().attack(line, column);
-                }catch (InputMismatchException e) {
-                     System.out.println("Entrée invalide ! Assurez-vous d'entrer un entier.");
-                     scanner.nextLine();
-                }
-            }
-
-            if (!isFinished()) switchCurrentPlayer();
-        }
-        state.finish(this);
-        System.out.println(currentPlayer.getLogin() + " a gagné");
+    public Player getOpponentPlayer() {
+        return currentPlayer.equals(player1) ? player2 : player1;
     }
 
-    private void switchCurrentPlayer() {
-        currentPlayer = (currentPlayer.equals(player1)) ? player2 : player1;
+    public boolean isFinished() {
+        boolean isFinished = player1.getOcean().getNbSunkBoats() >= NB_BOAT || player2.getOcean().getNbSunkBoats() >= NB_BOAT;
+        if (isFinished) state.finish(this);
+        return isFinished;
     }
 
-    private boolean isFinished() {
-        return player1.getOcean().getNbSunkBoats() >= NB_BOAT || player2.getOcean().getNbSunkBoats() >= NB_BOAT;
+    public void switchCurrentPlayer() {
+        currentPlayer = getOpponentPlayer();
     }
 
     public void setState(State state) {
         this.state = state;
     }
 }
+
